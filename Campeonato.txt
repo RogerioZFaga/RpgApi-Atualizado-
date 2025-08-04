@@ -1,0 +1,15 @@
+http://luizsouza.somee.com/game
+
+* Em duplas - criar conta do campeonato (Não esqueça a senha por favor)
+
+* Criar um personagem 
+--> padrão (nome do personagem) / nome abreviado da dupla/individuo.
+
+* Criar uma arma
+
+* Atribuir uma ou mais habilidades ao seu personagem.
+
+Não fazer mais nada até as próximas etapas.
+
+Git do projeto front-end:
+--> github.com/lzsouza987/2024_2_DS_RpgMvc_camp

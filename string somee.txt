@@ -1,0 +1,7 @@
+Server=tcp:server-rogerio-miguel.database.windows.net,1433;Initial Catalog=db-pamii-rogerio-miguel;Persist Security Info=False;User ID=sa-rogerio-miguel;Password={your_password};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;
+
+dotnet ef database update
+
+*123456HAS*
+
+dotnet add package ...
