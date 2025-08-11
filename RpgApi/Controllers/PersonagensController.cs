@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RpgApi.Data;
 using RpgApi.Models;
-using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Authorization
 
 namespace RpgApi.Controllers
 {
