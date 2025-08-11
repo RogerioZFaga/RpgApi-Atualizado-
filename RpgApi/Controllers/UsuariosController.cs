@@ -7,6 +7,11 @@ using RpgApi.Data;
 using Microsoft.EntityFrameworkCore;
 using RpgApi.Models;
 using RpgApi.Utils;
+using System.Security.Claims;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using System.IdentityModel.Tokens.Jwt;
+
 
 
 namespace RpgApi.Controllers
@@ -15,11 +20,34 @@ namespace RpgApi.Controllers
     [Route("[controller]")]
     public class UsuariosController : ControllerBase
     {
-        private readonly DataContext _context;        
+        private readonly DataContext _context;     
+        private readonly IConfiguration _configuration;   
 
-        public UsuariosController(DataContext context)
+        public UsuariosController(DataContext context, IConfiguration configuration)
         {
-            _context = context;            
+            _context = context;     
+            _configuration = configuration;       
+        }
+
+        private string CriarToken(Usuario usuario)
+        {
+        List<Claim> claims = new List<Claim>
+        {
+            new Claim(ClaimTypes.NameIdentifier, usuario.Id.ToString()),
+            new Claim(ClaimTypes.Name, usuario.Username)
+        };
+            SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8
+            .GetBytes(_configuration.GetSection("ConfiguracaoToken:Chave").Value));
+            SigningCredentials creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+            SecurityTokenDescriptor tokenDescriptor = new SecurityTokenDescriptor
+        {
+            Subject = new ClaimsIdentity(claims),
+            Expires = DateTime.Now.AddDays(1),
+            SigningCredentials = creds
+        };
+            JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
+            SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
         }
 
         private async Task<bool> UsuarioExistente(string username)
@@ -78,6 +106,7 @@ namespace RpgApi.Controllers
 
                     usuario.PasswordHash = null;//Remoção do hash/salt para não transitar no retorno da requisição.
                     usuario.PasswordSalt = null;
+                    usuario.Token = CriarToken(usuario);
 
                     return Ok(usuario);
                 }
@@ -234,6 +263,8 @@ namespace RpgApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        
 
         
 
