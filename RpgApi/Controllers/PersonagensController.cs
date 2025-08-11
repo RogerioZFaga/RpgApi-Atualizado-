@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace RpgApi.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class PersonagensController : ControllerBase
