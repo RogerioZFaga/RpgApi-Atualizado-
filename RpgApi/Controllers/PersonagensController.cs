@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using RpgApi.Data;
 using RpgApi.Models;
 using Microsoft.AspNetCore.Authorization;
+using RpgApi.Extensions;
 
 namespace RpgApi.Controllers
 {
@@ -64,8 +65,14 @@ namespace RpgApi.Controllers
         {
             try
             {
+                if (novoPersonagem.PontosVida > 100)
+                    throw new Exception("Pontos de vida não pode ser maior que 100");
+
+                novoPersonagem.Usuario = _context.TB_USUARIOS.FirstOrDefault(uBusca => uBusca.Id == User.UsuarioId());
+
                 await _context.TB_PERSONAGENS.AddAsync(novoPersonagem);
                 await _context.SaveChangesAsync();
+                
 
                 return Ok(novoPersonagem.Id);
             }
@@ -223,20 +230,22 @@ namespace RpgApi.Controllers
             }
         }
 
-        [HttpGet("GetByUser/{userId}")]
+        [HttpGet("GetByUser")]
         public async Task<IActionResult> GetByUserAsync(int userId)
         {
             try
             {
+                int id = User.UsuarioId();
+
                 List<Personagem> lista = await _context.TB_PERSONAGENS
-                            .Where(u => u.Usuario.Id == userId)
+                            .Where(u => u.Usuario.Id == id)
                             .ToListAsync();
 
                 return Ok(lista);
             }
             catch (System.Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(ex.Message + " - " + ex.InnerException);
             }
         }
 
