@@ -55,7 +55,10 @@ namespace AppRpgEtec.ViewModels.Usuarios
         #endregion
 
         #region Metodos
-               
+
+        private CancellationTokenSource _cancelTokenSource;
+
+        private bool _isChekingLocation;
         public async Task AutenticarUsuario()
         {
             try
@@ -131,6 +134,12 @@ namespace AppRpgEtec.ViewModels.Usuarios
                     .DisplayAlert("Informação", ex.Message + " Detalhes: " + ex.InnerException, "Ok");
             }
         }
+        _isCheckingLocation = true;
+        _cancelTokenSource = new CancellationTokenSource();
+        GeolocationRequest request =
+            new GeolocationRequest(GeolocationAccuracy.Medium, TimeSpan.FromSeconds(10);
+
+        Location location = await Geolocation.Default.GetLocationAsync(request, _cancelTokenSource.Token)
 
         //android:icon="@mipmap/appicon" android:roundIcon="@mipmap/appicon_round"
 

@@ -20,7 +20,7 @@ namespace AppRpgEtec.Services.Usuarios
             _request = new Request();
         }
 
-        private string _token = string.Empty;
+        private string _token;
 
         public UsuarioService(string token)
         {
@@ -43,6 +43,22 @@ namespace AppRpgEtec.Services.Usuarios
 
             return u;
         }      
+
+        public async Task<int> PutAtualizarLocalizacaoAsync(Usuario u)
+        {
+            string urlComplementar = "/AtualizarLocalizacao";
+            var result = await _request.PutAsync(_apiUrlBase + urlComplementar, u, _token);
+            return result;
+        }
+
+        public async Task<ObservableCollection<Usuario>> GetUsuariosAsync()
+        {
+            string urlComplementar = string.Format("{0}", "/GetAll");
+            ObservableCollection<Models.Usuario> listaUsuarios = await
+            _request.GetAsync<ObservableCollection<Models.Usuario>>(_apiUrlBase + urlComplementar,
+            _token);
+            return listaUsuarios;
+        }
 
 
     }

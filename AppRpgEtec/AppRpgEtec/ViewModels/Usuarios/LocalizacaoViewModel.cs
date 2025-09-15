@@ -3,55 +3,55 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Maui.Controls.Maps;
+using Microsoft.Maui.Maps;
+using Map = Microsoft.Maui.Controls.Maps.Map;
 
 namespace AppRpgEtec.ViewModels.Usuarios
 {
-    namespace AppRpgEtec.ViewModels.Usuarios;
-
-    using Microsoft.Maui.Controls.Maps;
-    using Microsoft.Maui.Maps;
-    using Map = Microsoft.Maui.Controls.Maps.Map;
-
-    private Map meuMapa;
-
-    public Map MeuMapa
+    internal class LocalizacaoViewModel : BaseViewModel
     {
-        get => meuMapa;
-        set
+        private Map meuMapa;
+
+        public Map MeuMapa
         {
-            if (value != null)
+            get => meuMapa;
+            set
             {
-                meuMapa = value;
-                OnPropertyChanged();
+                if (value != null)
+                {
+                    meuMapa = value;
+                    OnPropertyChanged();
+                }
             }
         }
-    }
 
-    public async void InicializarMapa()
-    {
-        try
+        public async void InicializarMapa()
         {
-            Location location = new Location(-23.5200241d, -46.596498d);
-            Pin pinEtec = new Pin()
+            try
             {
-                Type = PinType.Place,
-                Label = "Etec Horácio",
-                Address = "Rua alcântara, 113, Vila Guilherme",
-                Location = location
-            };
+                Location location = new Location(-23.5200241d, -46.596498d);
+                Pin pinEtec = new Pin()
+                {
+                    Type = PinType.Place,
+                    Label = "Etec Horácio",
+                    Address = "Rua alcântara, 113, Vila Guilherme",
+                    Location = location
+                };
 
-            Map map = new Map();
-            MapSpan mapSpan = MapSpan
-                .FromCenterAndRadius(location, Distance.FromKilometers(5));
-            map.Pins.Add(pinEtec);
-            map.MoveToRegion(mapSpan);
+                Map map = new Map();
+                MapSpan mapSpan = MapSpan
+                    .FromCenterAndRadius(location, Distance.FromKilometers(5));
+                map.Pins.Add(pinEtec);
+                map.MoveToRegion(mapSpan);
 
-            MeuMapa = map;
-        }
-        catch (Exception ex)
-        {
-            await Application.Current.MainPage
-                    .DisplayAlert("Erro", ex.Message, "OK");
+                MeuMapa = map;
+            }
+            catch (Exception ex)
+            {
+                await Application.Current.MainPage
+                        .DisplayAlert("Erro", ex.Message, "OK");
+            }
         }
     }
 }

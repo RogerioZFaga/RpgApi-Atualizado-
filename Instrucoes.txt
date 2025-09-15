@@ -1,0 +1,9 @@
+Acessar:
+http://console.developers.google.com/
+
+Fazer autenticação com sua conta google:
+Seguir passos no PDF Aula 07.
+
+- Usuário de Android:
+--> Testar em casa como rodar app MAUI no Android
+--> Trazer Cabos USB
