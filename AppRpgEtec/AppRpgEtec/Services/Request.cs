@@ -16,6 +16,7 @@ namespace AppRpgEtec.Services
 
             httpClient.DefaultRequestHeaders.Authorization
             = new AuthenticationHeaderValue("Bearer", token);
+            httpClient.DefaultRequestHeaders.Add("User-Agent", "AppRpgEtec/1.0 (rogeriozfaga@gmail.com)");
 
             var content = new StringContent(JsonConvert.SerializeObject(data));
             content.Headers.ContentType = new MediaTypeHeaderValue("application/json");

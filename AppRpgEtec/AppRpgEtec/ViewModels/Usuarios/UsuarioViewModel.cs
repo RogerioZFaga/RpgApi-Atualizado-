@@ -55,10 +55,10 @@ namespace AppRpgEtec.ViewModels.Usuarios
         #endregion
 
         #region Metodos
+               
+        private CancellationTokenSource _cancellationTokenSource;
+        private bool _isCheckingLocation;
 
-        private CancellationTokenSource _cancelTokenSource;
-
-        private bool _isChekingLocation;
         public async Task AutenticarUsuario()
         {
             try
@@ -77,10 +77,25 @@ namespace AppRpgEtec.ViewModels.Usuarios
                     Preferences.Set("UsuarioUsername", uAutenticado.Username);
                     Preferences.Set("UsuarioPerfil", uAutenticado.Perfil);
 
+                    _isCheckingLocation = true;
+                    _cancellationTokenSource =new CancellationTokenSource();
+                    GeolocationRequest request = new GeolocationRequest(GeolocationAccuracy.Medium, TimeSpan.FromSeconds(10));
+
+                    Location location = await Geolocation.Default.GetLocationAsync(request, _cancellationTokenSource.Token);
+
+                    Usuario uLoc = new Usuario();
+                    uLoc.Id = uAutenticado.Id;
+                    uLoc.Latitude = location.Latitude;
+                    uLoc.Longitude = location.Longitude;
+
+                    UsuarioService uServiceLoc = new UsuarioService(uAutenticado.Token);
+                    await uServiceLoc.PutAtualizarLocalizacaoAsync(uLoc);
+
                     await Application.Current.MainPage
                         .DisplayAlert("Informação", mensagem, "Ok");
 
                     Application.Current.MainPage = new AppShell();
+
                 }
                 else
                 {
@@ -134,12 +149,6 @@ namespace AppRpgEtec.ViewModels.Usuarios
                     .DisplayAlert("Informação", ex.Message + " Detalhes: " + ex.InnerException, "Ok");
             }
         }
-        _isCheckingLocation = true;
-        _cancelTokenSource = new CancellationTokenSource();
-        GeolocationRequest request =
-            new GeolocationRequest(GeolocationAccuracy.Medium, TimeSpan.FromSeconds(10);
-
-        Location location = await Geolocation.Default.GetLocationAsync(request, _cancelTokenSource.Token)
 
         //android:icon="@mipmap/appicon" android:roundIcon="@mipmap/appicon_round"
 
